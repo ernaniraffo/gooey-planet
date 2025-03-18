@@ -56,30 +56,11 @@ public class Player : MonoBehaviour
         characterController.Move(movementDirection * Time.deltaTime);
         Debug.Log("Move input: " + moveInput);
     }
-
+   
     private void SplashWater() {
-        StartCoroutine(SpawnWaterDrop());
-    }
-
-    IEnumerator SpawnWaterDrop() {
-        float timeALive = 0;
-        float maxTimeAlive = 4f;
         // spawn the water droplet in front of the hose end
         Vector3 positionToSpawn = hoseEnd.transform.position + new Vector3(0, 0, hoseEnd.transform.lossyScale.z / 2);
         // instantiating the water droplet will make it go forwards for some time
-        GameObject waterDropSpawned = Instantiate(waterDrop, positionToSpawn, Quaternion.identity, hoseEnd.transform);
-        // get the rigid body to add force to
-        Rigidbody waterDropRigidBody = waterDropSpawned.GetComponent<Rigidbody>();        
-        // get current player's forward direction when coroutine starts        
-        Vector3 forwardDirectionAtTimeOfSplash = transform.forward;
-
-        while (timeALive < maxTimeAlive) {
-            timeALive += Time.deltaTime;
-            waterDropRigidBody.AddForce(forwardDirectionAtTimeOfSplash * waterDropSpeed);
-            yield return null;
-        }
-
-        // destroy the water droplet once done
-        Destroy(waterDropSpawned);
+        Instantiate(waterDrop, positionToSpawn, Quaternion.identity);
     }
 }
