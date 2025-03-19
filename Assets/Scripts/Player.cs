@@ -15,9 +15,8 @@ public class Player : MonoBehaviour
 
     #region PLAYER PROPERTIES
     private float playerSpeed = 10f;
-    private Vector3 gravityForce;
-    private float gravityMultiplier = 3f;
-    private float waterDropSpeed = 5f;
+    private float waterDropLaunchCoolDown = 0.025f;
+    private float timeSinceLastWaterDropLaunch = 0;
     #endregion
 
     #region REFERENCE OBJECTS
@@ -36,6 +35,9 @@ public class Player : MonoBehaviour
     void Update()
     {
         Move();
+        if (Time.time - timeSinceLastWaterDropLaunch >= waterDropLaunchCoolDown) {
+            timeSinceLastWaterDropLaunch = 0;
+        }
         if (attackInput) {
             SplashWater();
         }
@@ -57,9 +59,12 @@ public class Player : MonoBehaviour
     }
    
     private void SplashWater() {
-        // spawn the water droplet in front of the hose end
-        Vector3 positionToSpawn = hoseEnd.transform.position + new Vector3(0, 0, hoseEnd.transform.lossyScale.z / 2 + 1);
-        // instantiating the water droplet will make it go forwards for some time
-        Instantiate(waterDrop, positionToSpawn, Quaternion.identity);
+        if (timeSinceLastWaterDropLaunch == 0) {
+            // spawn the water droplet in front of the hose end
+            Vector3 positionToSpawn = hoseEnd.transform.position + new Vector3(0, 0, hoseEnd.transform.lossyScale.z / 2 + 1);
+            // instantiating the water droplet will make it go forwards for some time
+            Instantiate(waterDrop, positionToSpawn, Quaternion.identity);
+            timeSinceLastWaterDropLaunch = Time.time;
+        }
     }
 }
