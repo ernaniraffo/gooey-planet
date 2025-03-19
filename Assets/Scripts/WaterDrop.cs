@@ -24,4 +24,11 @@ public class WaterDrop : MonoBehaviour
             launchedForward = true;
         }
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (!collision.gameObject.CompareTag("Water")) {
+            Destroy(gameObject);
+        }
+    }
 }

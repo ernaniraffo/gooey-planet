@@ -54,12 +54,11 @@ public class Player : MonoBehaviour
         Vector3 movementDirection = new Vector3(moveInput.x, 0, moveInput.y);
         movementDirection *= playerSpeed;
         characterController.Move(movementDirection * Time.deltaTime);
-        Debug.Log("Move input: " + moveInput);
     }
    
     private void SplashWater() {
         // spawn the water droplet in front of the hose end
-        Vector3 positionToSpawn = hoseEnd.transform.position + new Vector3(0, 0, hoseEnd.transform.lossyScale.z / 2);
+        Vector3 positionToSpawn = hoseEnd.transform.position + new Vector3(0, 0, hoseEnd.transform.lossyScale.z / 2 + 1);
         // instantiating the water droplet will make it go forwards for some time
         Instantiate(waterDrop, positionToSpawn, Quaternion.identity);
     }
