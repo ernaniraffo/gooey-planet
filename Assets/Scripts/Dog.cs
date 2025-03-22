@@ -30,7 +30,7 @@ public class Dog : MonoBehaviour
 
     private void LookoutForPlayer() {
         if (Physics.Raycast(raycastOrigin, transform.forward, out hit, maxDistance)) {
-            Debug.DrawRay(raycastOrigin, transform.forward, Color.blue, maxDistance);
+            // Debug.DrawRay(raycastOrigin, transform.forward, Color.blue, maxDistance);
             if (hit.transform.gameObject.CompareTag("Player")) {
                 noticedPlayer = true;
                 return;
@@ -40,7 +40,7 @@ public class Dog : MonoBehaviour
     }
 
     private void LookAtPlayer() {
-        Debug.DrawRay(raycastOrigin, transform.forward, Color.green, maxDistance);
+        // Debug.DrawRay(raycastOrigin, transform.forward, Color.green, maxDistance);
         transform.LookAt(hit.transform.position);
     }
 
