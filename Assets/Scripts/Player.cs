@@ -51,6 +51,10 @@ public class Player : MonoBehaviour
         attackInput = context.ReadValueAsButton();
     }
 
+    public void OnInteract(InputAction.CallbackContext context) {
+        
+    }
+
     private void Move() {
         // Move the character according to input
         Vector3 movementDirection = new Vector3(moveInput.x, 0, moveInput.y);
