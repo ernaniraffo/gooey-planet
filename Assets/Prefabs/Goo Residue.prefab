@@ -118,7 +118,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6209670673190350319}
   - component: {fileID: 9154547058275495943}
-  - component: {fileID: -5740891899679827103}
+  - component: {fileID: 725531824629779366}
   m_Layer: 0
   m_Name: Goo Residue
   m_TagString: Untagged
@@ -163,7 +163,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.25, y: 0.25, z: 0.25}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-5740891899679827103
+--- !u!114 &725531824629779366
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -172,6 +172,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2395930773163671251}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5ca21935c17040fe92481169f01666e, type: 3}
+  m_Script: {fileID: 11500000, guid: 338da105ca9094edeadc5b46650f525f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

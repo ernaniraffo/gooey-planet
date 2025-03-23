@@ -122,7 +122,7 @@ public class Player : MonoBehaviour
         if (characterController.isGrounded && playerVelocity.y < 0) {
             // Hitting this part of the code means we were jumping and are done.
             // Let's reset the jump animation
-            Debug.Log("character is grounded now");
+            // Debug.Log("character is grounded now");
             playerVelocity.y = 0f;
             // coyoteFrames = 0;
             // SetJumping(false);
@@ -132,13 +132,13 @@ public class Player : MonoBehaviour
         if (playerVelocity.y < 0) {
             // multiply gravity scale by multiplier for faster fall
             gravityScale *= gravityFallingMultiplier;
-            Debug.Log("New gravity scale: " + gravityScale);
+            // Debug.Log("New gravity scale: " + gravityScale);
             // clamp the player velocity so our fall speed is consistent
             playerVelocity.y = Mathf.Max(playerVelocity.y, -maxFallSpeed);
         }
         // increase the player velocity by gravity scale to make player jump or fall
         playerVelocity.y += gravityScale * Time.deltaTime;
-        Debug.Log("Player velocity: " + playerVelocity);
+        // Debug.Log("Player velocity: " + playerVelocity);
 
         // if (IsFalling()) {
         //     coyoteFrames++;
