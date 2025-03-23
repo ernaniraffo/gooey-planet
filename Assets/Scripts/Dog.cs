@@ -8,6 +8,8 @@ public class Dog : MonoBehaviour
     private Vector3 raycastOrigin;
     private bool noticedPlayer;
     public float dogWalkSpeed;
+    public float health;
+    public float maxHealth;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -51,5 +53,13 @@ public class Dog : MonoBehaviour
         direction = direction.normalized * dogWalkSpeed * Time.deltaTime;
         // move towards the player
         transform.position += new Vector3(direction.x, 0, direction.z);
+    }
+
+    public void DecrementHealth(int val) {
+        health -= val;
+    }
+
+    public float GetHealthAsPercent() {
+        return health / maxHealth;
     }
 }

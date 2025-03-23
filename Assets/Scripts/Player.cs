@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     private float gravityFallingMultiplier = 3;
     private float maxFallSpeed = 10;
     private float rotationSpeed = 15.0f;
+    private int health;
     #endregion
 
     #region REFERENCE OBJECTS
@@ -34,6 +35,9 @@ public class Player : MonoBehaviour
     {
         // Get the components
         characterController = GetComponent<CharacterController>();
+
+        // start with base health
+        health = 100;
     }
 
     // Update is called once per frame
@@ -150,4 +154,18 @@ public class Player : MonoBehaviour
             timeSinceLastWaterDropLaunch = Time.time;
         }
     }
+
+    #region PUBLIC METHODS
+    public void DecrementHealth(int val) {
+        health -= val;
+    }
+
+    public void IncrementHealth(int val) {
+        health += val;
+    }
+
+    public int GetHealth() {
+        return health;
+    }
+    #endregion
 }
