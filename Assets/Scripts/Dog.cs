@@ -33,6 +33,7 @@ public class Dog : MonoBehaviour
     void Update()
     {
         raycastOrigin = raycastOriginTransform.position;
+        noticedPlayer = false;
         LookoutForPlayer();
         if (IsEvil() && noticedPlayer) {
             // look at the player

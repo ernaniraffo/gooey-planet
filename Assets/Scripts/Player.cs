@@ -23,6 +23,8 @@ public class Player : MonoBehaviour
     private float maxFallSpeed = 10;
     private float rotationSpeed = 15.0f;
     private int health;
+    private int gooDamage = 2;
+    private float timeSpentOnGoo = 0;
     #endregion
 
     #region REFERENCE OBJECTS
@@ -63,6 +65,21 @@ public class Player : MonoBehaviour
 
     public void OnInteract(InputAction.CallbackContext context) {
         
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit) {
+        if (hit.collider.gameObject.CompareTag("Goo")) {
+            timeSpentOnGoo += Time.deltaTime;
+            if (timeSpentOnGoo >= 0.1) {
+                // decrement the player health every 0.1 seconds spent on goo
+                DecrementHealth(gooDamage);
+                // reset the time so that there is a cooldown before the next hit
+                timeSpentOnGoo = 0;
+            }
+        } else if (timeSpentOnGoo > 0) {
+            // reset the time if we are not on goo anymore
+            timeSpentOnGoo = 0;
+        }
     }
 
     private void Move() {
@@ -164,7 +181,7 @@ public class Player : MonoBehaviour
         health += val;
     }
 
-    public int GetHealth() {
+    public float GetHealth() {
         return health;
     }
     #endregion
