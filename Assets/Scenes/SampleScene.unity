@@ -2233,6 +2233,8 @@ MonoBehaviour:
   raycastOriginTransform: {fileID: 1061794172}
   maxDistance: 20
   dogWalkSpeed: 2
+  dogBiteDashDuration: 0.75
+  minDistanceToBitePlayer: 5
   gooOnDog: []
 --- !u!1001 &692858042
 PrefabInstance:

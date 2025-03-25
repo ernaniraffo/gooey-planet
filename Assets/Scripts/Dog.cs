@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Dog : MonoBehaviour
 {
@@ -9,9 +10,12 @@ public class Dog : MonoBehaviour
     private Vector3 raycastOrigin;
     private bool noticedPlayer;
     public float dogWalkSpeed;
+    public float dogBiteDashDuration;
     private int health;
     private int maxHealth;
     private int healthDecrementWhenHitByWater;
+    public int minDistanceToBitePlayer;
+    private bool bitingPlayer;
     
     // get all the goo on the animal
     public List<GooOnAnimal> gooOnDog;
@@ -36,10 +40,18 @@ public class Dog : MonoBehaviour
         noticedPlayer = false;
         LookoutForPlayer();
         if (IsEvil() && noticedPlayer) {
-            // look at the player
-            LookAtPlayer();
-            // move to attack player
-            MoveTowardsPlayer();
+            // check if dog is already performing biting animation
+            if (!bitingPlayer) {
+                // look at the player
+                LookAtPlayer();
+                // move to attack player
+                MoveTowardsPlayer();
+                // bite the player if within range
+                if (WithinBiteRange()) {
+                    // play biting animation and set internal state
+                    BitePlayer();
+                }
+            }
         }
     }
 
@@ -100,5 +112,27 @@ public class Dog : MonoBehaviour
 
     private bool IsEvil() {
         return gooOnDog.Count > 0;
+    }
+
+    private bool WithinBiteRange() {
+        return (GameSingleton.instance.player.transform.position - transform.position).magnitude <= minDistanceToBitePlayer;
+    }
+
+    private void BitePlayer() {
+        // set the bite state to true
+        EnableBiting();
+        // move the transform using DG Tweening
+        Vector3 direction = new Vector3(hit.transform.position.x, transform.position.y, hit.transform.position.z);
+        transform.DOMove(direction, dogBiteDashDuration).OnComplete(DisableBiting);
+    }
+
+    private void DisableBiting() {
+        Debug.Log("Done biting player");
+        bitingPlayer = false;
+    }
+
+    private void EnableBiting() {
+        Debug.Log("Biting player");
+        bitingPlayer = true;
     }
 }
