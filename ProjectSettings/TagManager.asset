@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Water
   - Goo
+  - Dog
   layers:
   - Default
   - TransparentFX

@@ -16,6 +16,7 @@ public class Dog : MonoBehaviour
     private int healthDecrementWhenHitByWater;
     public int minDistanceToBitePlayer;
     private bool bitingPlayer;
+    private bool didBitePlayer;
     
     // get all the goo on the animal
     public List<GooOnAnimal> gooOnDog;
@@ -41,7 +42,9 @@ public class Dog : MonoBehaviour
         LookoutForPlayer();
         if (IsEvil() && noticedPlayer) {
             // check if dog is already performing biting animation
-            if (!bitingPlayer) {
+            if (!IsBiting()) {
+                // the player could have notified this script that the dog performed a bite
+                SetBitPlayer(false);
                 // look at the player
                 LookAtPlayer();
                 // move to attack player
@@ -82,7 +85,7 @@ public class Dog : MonoBehaviour
 
     public void DecrementHealth(int val) {
         health -= val;
-        DebugPrintHealth();
+        // DebugPrintHealth();
     }
 
     public float GetHealthAsPercent() {
@@ -135,4 +138,16 @@ public class Dog : MonoBehaviour
         Debug.Log("Biting player");
         bitingPlayer = true;
     }
+
+    public bool IsBiting() {
+        return bitingPlayer;
+    }
+
+    public bool DidBitePlayer() {
+        return didBitePlayer;
+    }
+
+    public void SetBitPlayer(bool bitePerformed) {
+        didBitePlayer = bitePerformed;
+    } 
 }

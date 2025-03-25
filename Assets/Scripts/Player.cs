@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     private int health;
     private int gooDamage = 2;
     private float timeSpentOnGoo = 0;
+    private bool dogJustBit;
     #endregion
 
     #region REFERENCE OBJECTS
@@ -68,6 +69,17 @@ public class Player : MonoBehaviour
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit) {
+        if (hit.collider.gameObject.CompareTag("Dog")) {
+            Dog dog = hit.collider.gameObject.GetComponent<Dog>();
+            if (!dog.DidBitePlayer() && dog.IsBiting()) {
+                // decrement the player health once
+                DecrementHealth(10);
+                // ah yes, controlling what the dog thinks through telepathy, very smart :|
+                // the dog will set this internal state to false once its biting animation stops
+                dog.SetBitPlayer(true);
+            }
+        }
+        
         if (hit.collider.gameObject.CompareTag("Goo")) {
             timeSpentOnGoo += Time.deltaTime;
             if (timeSpentOnGoo >= 0.1) {
