@@ -21,6 +21,11 @@ public class Dog : MonoBehaviour
     // get all the goo on the animal
     public List<GooOnAnimal> gooOnDog;
 
+    // points to walk to
+    private List<Vector3> pointsToWalkTo;
+    int homeIndex = 0;
+    int currentWalkPoint;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -32,6 +37,10 @@ public class Dog : MonoBehaviour
         // since it requires two shots to delete the goo, the decrement will be 1.
         healthDecrementWhenHitByWater = 1;
         DebugPrintHealth();
+        
+        // set the points in which to walk to while idle
+        SetPointsToWalkTo();
+        currentWalkPoint = homeIndex + 1;
     }
 
     // Update is called once per frame
@@ -39,21 +48,34 @@ public class Dog : MonoBehaviour
     {
         raycastOrigin = raycastOriginTransform.position;
         noticedPlayer = false;
-        LookoutForPlayer();
-        if (IsEvil() && noticedPlayer) {
-            // check if dog is already performing biting animation
-            if (!IsBiting()) {
-                // the player could have notified this script that the dog performed a bite
-                SetBitPlayer(false);
-                // look at the player
-                LookAtPlayer();
-                // move to attack player
-                MoveTowardsPlayer();
-                // bite the player if within range
-                if (WithinBiteRange()) {
-                    // play biting animation and set internal state
-                    BitePlayer();
+        if (IsEvil()) {
+            LookoutForPlayer();
+            if (noticedPlayer) {
+                // check if dog is already performing biting animation
+                if (!IsBiting()) {
+                    // the player could have notified this script that the dog performed a bite
+                    SetBitPlayer(false);
+                    // look at the player
+                    LookAtPlayer();
+                    // move to attack player
+                    MoveTowardsPlayer();
+                    // bite the player if within range
+                    if (WithinBiteRange()) {
+                        // play biting animation and set internal state
+                        BitePlayer();
+                    }
                 }
+            } else {
+                // move to the next point
+                if (ReachedPoint()) {
+                    Debug.Log("Reached walk point");
+                    currentWalkPoint = (currentWalkPoint + 1) % pointsToWalkTo.Count;
+                    Debug.Log("New walk point: " + pointsToWalkTo[currentWalkPoint]);
+                } else {
+                    Debug.Log("Have not reached next point yet");
+                }
+                Debug.Log("Moving to point: " + pointsToWalkTo[currentWalkPoint]);
+                MoveToPoint();
             }
         }
     }
@@ -77,6 +99,17 @@ public class Dog : MonoBehaviour
     private void MoveTowardsPlayer() {
         // get the difference in direction
         Vector3 direction = hit.transform.position - transform.position;
+        // multiply the direction by the walk speed of the dog
+        direction = direction.normalized * dogWalkSpeed * Time.deltaTime;
+        // move towards the player
+        transform.position += new Vector3(direction.x, 0, direction.z);
+    }
+
+    private void MoveToPoint() {
+        // look at the next point
+        transform.LookAt(pointsToWalkTo[currentWalkPoint]);
+        // get the difference in direction
+        Vector3 direction = pointsToWalkTo[currentWalkPoint] - transform.position;
         // multiply the direction by the walk speed of the dog
         direction = direction.normalized * dogWalkSpeed * Time.deltaTime;
         // move towards the player
@@ -149,5 +182,22 @@ public class Dog : MonoBehaviour
 
     public void SetBitPlayer(bool bitePerformed) {
         didBitePlayer = bitePerformed;
-    } 
+    }
+
+    private void SetPointsToWalkTo() {
+        // this method should only be referenced once by the Start() method
+        // make a triangular area where the dog will walk
+        int metersToWalk = 5;
+        pointsToWalkTo = new List<Vector3>
+        {
+            transform.position,
+            transform.position + (Vector3.forward * metersToWalk),
+            transform.position + (Vector3.right * metersToWalk)
+        };
+        Debug.Log("Points to walk to: " + pointsToWalkTo);
+    }
+
+    private bool ReachedPoint() {
+        return (pointsToWalkTo[currentWalkPoint] - transform.position).magnitude < 1;
+    }
 }
