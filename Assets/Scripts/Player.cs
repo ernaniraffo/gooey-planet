@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
 
     #region PLAYER PROPERTIES
     private float playerSpeed = 10f;
-    private float waterDropLaunchCoolDown = 0.025f;
+    private float waterDropLaunchCoolDown = 0f;
     private float timeSinceLastWaterDropLaunch = 0;
     private Vector3 playerVelocity;
     private float gravityValue = Physics.gravity.y;

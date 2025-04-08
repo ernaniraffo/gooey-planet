@@ -4,7 +4,7 @@ public class WaterDrop : MonoBehaviour
 {
     private Rigidbody rb;
     private bool launchedForward = false;
-    private float thrust = 10f;
+    private float thrust = 5f;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
