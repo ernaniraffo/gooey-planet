@@ -17,6 +17,10 @@ public class Dog : MonoBehaviour
     public int minDistanceToBitePlayer;
     private bool bitingPlayer;
     private bool didBitePlayer;
+
+    // move direction calculated 
+    Vector3 moveDirection;
+    private float metersWalked;
     
     // get all the goo on the animal
     public List<GooOnAnimal> gooOnDog;
@@ -37,10 +41,6 @@ public class Dog : MonoBehaviour
         // since it requires two shots to delete the goo, the decrement will be 1.
         healthDecrementWhenHitByWater = 1;
         DebugPrintHealth();
-        
-        // set the points in which to walk to while idle
-        SetPointsToWalkTo();
-        currentWalkPoint = homeIndex + 1;
     }
 
     // Update is called once per frame
@@ -66,16 +66,14 @@ public class Dog : MonoBehaviour
                     }
                 }
             } else {
-                // move to the next point
-                if (ReachedPoint()) {
-                    Debug.Log("Reached walk point");
-                    currentWalkPoint = (currentWalkPoint + 1) % pointsToWalkTo.Count;
-                    Debug.Log("New walk point: " + pointsToWalkTo[currentWalkPoint]);
-                } else {
-                    Debug.Log("Have not reached next point yet");
+                if (metersWalked >= 5) {
+                    // rotate the dog 90 degrees to walk forward again
+                    transform.Rotate(new Vector3(0, 90, 0));
+                    // reset the amount of meters walked
+                    metersWalked = 0;
                 }
-                Debug.Log("Moving to point: " + pointsToWalkTo[currentWalkPoint]);
-                MoveToPoint();
+                moveDirection = transform.forward * Time.deltaTime * dogWalkSpeed;
+                MoveForward();
             }
         }
     }
@@ -105,15 +103,9 @@ public class Dog : MonoBehaviour
         transform.position += new Vector3(direction.x, 0, direction.z);
     }
 
-    private void MoveToPoint() {
-        // look at the next point
-        transform.LookAt(pointsToWalkTo[currentWalkPoint]);
-        // get the difference in direction
-        Vector3 direction = pointsToWalkTo[currentWalkPoint] - transform.position;
-        // multiply the direction by the walk speed of the dog
-        direction = direction.normalized * dogWalkSpeed * Time.deltaTime;
-        // move towards the player
-        transform.position += new Vector3(direction.x, 0, direction.z);
+    private void MoveForward() {
+        transform.position += moveDirection;
+        metersWalked += moveDirection.magnitude;
     }
 
     public void DecrementHealth(int val) {
@@ -182,22 +174,5 @@ public class Dog : MonoBehaviour
 
     public void SetBitPlayer(bool bitePerformed) {
         didBitePlayer = bitePerformed;
-    }
-
-    private void SetPointsToWalkTo() {
-        // this method should only be referenced once by the Start() method
-        // make a triangular area where the dog will walk
-        int metersToWalk = 5;
-        pointsToWalkTo = new List<Vector3>
-        {
-            transform.position,
-            transform.position + (Vector3.forward * metersToWalk),
-            transform.position + (Vector3.right * metersToWalk)
-        };
-        Debug.Log("Points to walk to: " + pointsToWalkTo);
-    }
-
-    private bool ReachedPoint() {
-        return (pointsToWalkTo[currentWalkPoint] - transform.position).magnitude < 1;
     }
 }
